@@ -9,6 +9,7 @@ import Header from "./components/Header.jsx";
 import DashBoard from "./components/DashBoard.jsx";
 import BlogPostDetail from "./components/blog/BlogPostDetail.jsx";
 import axios from "axios";
+import QrCodeDisplay from "./authentication/QrCodeDisplay.jsx";
 
 function App() {
     const [blogs, setBlogs] = useState([]); // State to store blogs data
@@ -49,6 +50,7 @@ function App() {
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
                         <Route path="/register" element={<Registration />} />
+                        <Route path="/qrcodeAuth" element={<QrCodeDisplay />} />
                         <Route path="/dashboard/*" element={<DashBoard />} />
                         <Route path="/blog/:id" element={<BlogPostDetail blogs={blogs} />} />
                     </Routes>

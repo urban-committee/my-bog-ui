@@ -24,15 +24,20 @@ import BLogin from "./components/BLogin.jsx";
 import Login from "./components/Login.jsx";
 import ForgotPassword from "./components/ForgotPassword.jsx";
 import Register from "./components/pages/Register.jsx";
-
+import Notification from "./blog/Notification.jsx";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 const App = () => {
     useEffect(() => {
         initializeMaterialize(); // Initialize Materialize components
     }, []);
     return (
+
         <AuthProvider>
             <Router>
+                <Notification />
                 <Routes>
+
                     <Route path="/blog" element={<BLogin/>}/>
                     {/*<Route path="/bl" element={<Login />} />*/}
                     {/*<Route path="/br" element={<Registration />} />*/}

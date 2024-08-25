@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 //import '../assets/css/login.css';
 import axios from "axios";
 import {AuthContext} from "../authentication/AuthContext";
+import Header from "./Header.jsx";
 //import {AuthContext} from "../authentication/AuthContext.jsx";
 
 const LoginForm = () => {
@@ -105,15 +106,15 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="LoginForm">
 
+        <div className="LoginForm">
             <div className="row">
                 <div className="col s6">
-
+                    <Header/>
                     <img src={logoside} alt="Logo"
-                         style={{height: 400, width: '430px', marginTop: 100}}/>
+                         style={{height: 400, width: '200px', marginTop: 10}}/>
                 </div>
-                <div className="col s6">
+                <div className="col ">
                     <div className="row">
                         <div style={{ marginTop: 100}}>
                             <h4 className="center">Blog Login</h4>
@@ -128,7 +129,7 @@ const LoginForm = () => {
                                 </div>
                             )}
                         </div>
-                        <form className="col s12 " onSubmit={handleSubmit}>
+                        <form className="container" onSubmit={handleSubmit}>
                             <div className=" row input-field">
                                 <input id="email" type="email" value={formValues.email}
                                        onChange={handleChange}/>

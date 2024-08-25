@@ -3,9 +3,34 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {initializeMaterialize} from "../assets/materialize-init.jsx";
+import Header from "./Header.jsx";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 const Registration = () => {
     const navigate = useNavigate();
+    const [isChecked, setIsChecked] = useState(false);
+    const [formValues, setFormValues] = useState({
+        username: '',
+        email: '',
+        password: '',
+        secret : null,
+        twoFactorEnabled : isChecked,
+
+    });
+
+    useEffect(() => {
+        setFormValues((prevFormValues) => ({
+            ...prevFormValues,
+            twoFactorEnabled: isChecked,
+        }));
+    }, [isChecked]);
+
+    const handleToggle = (event) => {
+        const newValue = event.target.checked;
+        setIsChecked(newValue);
+        console.log(newValue);
+    };
 
     // eslint-disable-next-line no-unused-vars
     const handleBackToLogin = () => {
@@ -15,12 +40,7 @@ const Registration = () => {
         initializeMaterialize(); // Initialize Materialize components
     }, []);
 
-    const [formValues, setFormValues] = useState({
-        username: '',
-        email: '',
-        password: '',
 
-    });
     // State to hold error messages
     const [errors, setErrors] = useState({
         username: '',
@@ -61,7 +81,8 @@ const Registration = () => {
         setErrors(errors);
         return valid;
     };
-
+   const [qrScan, setQrScan] = useState('');
+   const [useremail, setUserEmail] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const handleSubmit = async (e) => {
@@ -69,10 +90,37 @@ const Registration = () => {
         if (validateForm()) {
             try {
                 const response = await axios.post('http://localhost:8080/api/v1.0/blogsite/user/register', formValues);
-                console.log('Form submitted successfully:', response.data);
-                setSuccessMessage(response.data.message)
+                console.log('Form submitted successfully:', formValues);
+                setUserEmail(formValues.email)
+                toast.success(response.data.message,{
+                    position: "top-right",    // Position of the toast
+                    autoClose: 5000,          // Auto close after 5 seconds
+                    hideProgressBar: false,   // Show or hide progress bar
+                    closeOnClick: true,       // Close the toast when clicked
+                    pauseOnHover: true,       // Pause auto-close on hover
+                    draggable: true,          // Allow dragging to close
+                    progress: undefined,      // Progress bar state
+                    theme: "colored",         // Theme: "light", "dark", "colored"
+                });
+                if (formValues.twoFactorEnabled){
+                    console.log(response.data)
+                    console.log(response.data.message)
+                    navigate("/qrcodeAuth", { state: { qrScannerCode: response.data.qrcode, uemail: formValues.email } });
+                }
+
+               // setSuccessMessage(response.data.message)
             } catch (error) {
-                setErrorMessage(error.response.data.message);
+                toast.error(error.message,{
+                    position: "top-right",    // Position of the toast
+                    autoClose: 3000,          // Auto close after 5 seconds
+                    hideProgressBar: false,   // Show or hide progress bar
+                    closeOnClick: true,       // Close the toast when clicked
+                    pauseOnHover: true,       // Pause auto-close on hover
+                    draggable: true,          // Allow dragging to close
+                    progress: undefined,      // Progress bar state
+                    theme: "colored",         // Theme: "light", "dark", "colored"
+                });
+                //setErrorMessage(error.response.data.message);
                 if (error.response) {
                     console.log(error.response.data.message);
                     setErrors({
@@ -97,10 +145,11 @@ const Registration = () => {
 
     return (
         <div className="row">
-
             <div className="row ">
+                <ToastContainer/>
                 <div className="col s12 center-align">
-                    <h2>Registration for Blogging</h2>
+                    <Header/>
+                    <h4>Blog Sign Up</h4>
                 </div>
 
             </div>
@@ -117,7 +166,7 @@ const Registration = () => {
                     </div>
                 )}
                 <div className="row">
-                    <form className="col s12 reg-form" onSubmit={handleSubmit}>
+                    <form className="col s12 " onSubmit={handleSubmit}>
                         <div className=" row input-field">
                             <input id="username" type="text" className="validate" value={formValues.username}
                                    onChange={handleChange}/>
@@ -137,12 +186,16 @@ const Registration = () => {
                         </div>
                         <div className="row">
                             <div className="switch">
-                                <label style={{paddingRight:80}}>Two-factor authentication (2FA)</label>
+                                <label style={{paddingRight: 80}}>Two-factor authentication (2FA)</label>
                                 <label>
-                                    Enable
-                                    <input type="checkbox"/>
-                                    <span className="lever"></span>
                                     Disable
+                                    <input
+                                        type="checkbox"
+                                        checked={isChecked}
+                                        onChange={handleToggle} // Trigger handleToggle when the switch is toggled
+                                    />
+                                    <span className="lever"></span>
+                                    Enable
                                 </label>
                             </div>
                         </div>
