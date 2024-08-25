@@ -1,34 +1,33 @@
-import React, {useState}from 'react';
+import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
+import axios from "axios";
 
 const BlogPostDetail = ({ blogs }) => {
     const { id } = useParams();
-    // eslint-disable-next-line react/prop-types
-    console.log(blogs.blogname);
+    const [blog, setBlog] = useState([]);
+    useEffect(() => {
+        // Fetch blogs data from the API
+        axios.get(`http://localhost:8080/api/v1.0/blogsite/blogs/${id}`)
+            .then(response => {
+                console.log(response.data);
+                setBlog(response.data); // Update state with fetched data
+                // setLoading(false);
+            })
+            .catch(error => {
+               // setError('Failed to fetch blogs');
+                //setLoading(false);
+            });
+    }, []);
 
-    const [searchTerm, setSearchTerm] = useState(id);
-
-    // Filter the blogs based on the search term
-    // eslint-disable-next-line react/prop-types
-    const filteredBlogs = blogs.filter(blog =>
-        blog.id===searchTerm.toLowerCase()
-
-    );
-    console.log(filteredBlogs.blogname);
-
-    // eslint-disable-next-line react/prop-types
-    // blogs.map.find(p =>p.find(p => p.id === parseInt(id)));
-    // const post =
-
-    if (!filteredBlogs) {
+    if (!blog) {
         return <h2>Post not found</h2>;
     }
 
     return (
         <div className="container">
             <div className="section">
-                <h2>{filteredBlogs.blogname}</h2>
-                <p>{filteredBlogs.article}</p>
+                <h2>{blog.blogname}</h2>
+                <p>{blog.article}</p>
             </div>
         </div>
     );

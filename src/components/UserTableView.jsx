@@ -94,7 +94,7 @@ export default function UserTableView() {
     });
 
     useEffect(() => {
-        axios.get('http://localhost:8082/api/v1.0/blogsite/user/all')
+        axios.get('http://localhost:8080/api/v1.0/blogsite/user/all')
             .then(response => {
                 console.log(response.data);
                 setRows(response.data);
@@ -142,7 +142,7 @@ export default function UserTableView() {
     };
 
     const handleSubmit = () => {
-        axios.put(`http://localhost:8082/api/v1.0/blogsite/blogs/update/${currentRow.id}`, formData)
+        axios.put(`http://localhost:8080/api/v1.0/blogsite/blogs/update/${currentRow.id}`, formData)
             .then(response => {
                 setRows(prevRows => prevRows.map(row =>
                     row.id === currentRow.id ? response.data : row

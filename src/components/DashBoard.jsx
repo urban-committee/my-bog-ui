@@ -63,7 +63,7 @@ const DashBoard = () => {
                 <div className="containerkk">
                     <Routes>
                         <Route path="/blogs" element={<BlogPostList blogs={blogs} />} />
-                        <Route path="blog/:id" element={<BlogPostDetail posts={blogs} />} />
+                        <Route path="blog/:id" element={<BlogPostDetail post={blogs} />} />
                         <Route path="postblog" element={<PostBlog />} />
                         <Route path="userList" element={<UserTableView />} />
                         <Route path="profile" element={<div>Logout</div>} />

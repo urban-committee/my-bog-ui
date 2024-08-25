@@ -41,7 +41,7 @@ const UserRoleForm = ({ user }) => {
         // Perform API call to update roles
         try {
 
-            const response = await axios.put(`http://localhost:8082/api/v1.0/blogsite/user/${user.id}/roles`, rolesArray, {
+            const response = await axios.put(`http://localhost:8080/api/v1.0/blogsite/user/${user.id}/roles`, rolesArray, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
