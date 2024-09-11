@@ -72,19 +72,24 @@ const LoginForm = () => {
             try {
                 console.log(formValues)
                 const response = await axios.post('http://localhost:8080/api/v1.0/blogsite/user/authentication/signin', formValues);
-                console.log('login successfully:', response.data);
+               // console.log('login successfully:', response.data);
                 //setSuccessMessage(response.data.message)
-                const {accessToken, email, id, roles, tokenType, username} = response.data;
+                const {token, email,enabled2fa, id, roles, type, username} = response.data;
 
                 // Update global auth state and localStorage
-                // updateAuthData(accessToken, email, id, roles, tokenType, username);
+                updateAuthData(token, email, id, roles, type, username);
                 //
                 // login(email, accessToken, roles);
+                console.log(enabled2fa)
+                if(enabled2fa){
+                    navigate('/otp');
+                }else{
+                    navigate('/dashboard');
+                }
 
 
-                navigate('userdashboard/po');
             } catch (error) {
-                setErrorMessage('Login failed: ' + error.response.data);
+                setErrorMessage('Login failed: ' + error.response);
                 if (error.response) {
                     setErrors({
                         ...errors,

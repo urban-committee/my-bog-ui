@@ -10,7 +10,7 @@ const PostBlog = () => {
 
     const {authData} = useContext(AuthContext);
     const [formValues, setFormValues] = useState({
-        userId: authData.userId,
+        userId: authData.id,
         blogname: '',
         category: '',
         article: '',
@@ -24,11 +24,14 @@ const PostBlog = () => {
         category: '',
         article: '',
         authorname:'',
-        timestampofcreation: '' // Added for mandatory field error
+        timestampofcreation: '' 
     });
 
 
     const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+
 
     useEffect(() => {
         initializeMaterialize(); // Initialize Materialize components
@@ -91,13 +94,19 @@ const PostBlog = () => {
         if (validateForm()) {
             try {
                 console.log(formValues)
-                const response = await axios.post('http://localhost:8080/api/v1.0/blogsite/blogs/add', formValues);
+                const response = await axios.post('http://localhost:8080/api/v1.0/blogsite/blogs/add', formValues, {
+                    headers: {
+                      Authorization: `Bearer ${authData.accessToken}`,
+                      'Content-Type': 'application/json'
+                    }
+                  }
+                   );
                 console.log('Form submitted successfully:', response.data);
                 setSuccessMessage(response.data.message)
             } catch (error) {
                 setErrorMessage(error.response.data.message);
                 if (error.response) {
-                    console.log('Form submitted successfully:', error.response.data.message);
+                console.log(errorMessage);
                     setErrors({
                         ...errors,
                         api: error.response.data.message || 'An error occurred while submitting the form.',

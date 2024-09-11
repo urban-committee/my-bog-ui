@@ -22,7 +22,7 @@ const QrCodeDisplay = () => {
             />
             <div>
                 <h6>Enter OTP</h6>
-                <OTPInput length={6} onChange={handleOTPChange} uemail={uemail}/>
+                <OTPInput length={6} onChange={handleOTPChange} uemail={uemail} type={"new"}/>
             </div>
         </div>
     );

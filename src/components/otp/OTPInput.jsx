@@ -1,12 +1,13 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useContext} from 'react';
 import axios from 'axios';
 import {toast, ToastContainer} from "react-toastify";
-import {useNavigate} from 'react-router-dom';
-const OTPInput = ({length = 6, onChange, uemail}) => {
+import {useLocation, useNavigate} from 'react-router-dom';
+import {AuthContext} from "../../authentication/AuthContext.jsx";
+const OTPInput = ({length = 6, onChange, uemail,type}) => {
     const [otp, setOtp] = useState(new Array(length).fill(''));
     const inputRefs = useRef([]);
     const navigate = useNavigate();
-
+    const {authData} = useContext(AuthContext);
     const handleChange = (element, index) => {
         const value = element.value.replace(/[^0-9]/g, ''); // Only allow numbers
 
@@ -60,7 +61,14 @@ const OTPInput = ({length = 6, onChange, uemail}) => {
         if (otpCode.length === length) {
             try {
                 console.log(data1);
-                const response = await axios.post('http://localhost:8080/api/v1.0/blogsite/user/2fa-enable', data1);
+                console.log(authData.accessToken)
+                const response = await axios.post('http://localhost:8080/api/v1.0/blogsite/user/2fa-enable', data1,{
+                    headers: {
+                      Authorization: `Bearer ${authData.accessToken}`,
+                      'Content-Type': 'application/json'
+                    }
+                  });
+                  console.log(response);
                 toast.success('OTP Verified:',{
                     position: "top-right",    // Position of the toast
                     autoClose: 3000,          // Auto close after 5 seconds
@@ -72,7 +80,13 @@ const OTPInput = ({length = 6, onChange, uemail}) => {
                     theme: "colored",         // Theme: "light", "dark", "colored"
                 });
                 console.log('OTP Verified:', response.data);
-                navigate("/login")
+                if(type==="new"){
+                    navigate("/login");
+                }else{
+                    navigate("/dashboard");
+                }
+
+
             } catch (error) {
                 toast.error('Entered wrong verifying OTP:',{
                     position: "top-right",    // Position of the toast

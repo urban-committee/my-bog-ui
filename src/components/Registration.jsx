@@ -105,7 +105,15 @@ const Registration = () => {
                 if (formValues.twoFactorEnabled){
                     console.log(response.data)
                     console.log(response.data.message)
-                    navigate("/qrcodeAuth", { state: { qrScannerCode: response.data.qrcode, uemail: formValues.email } });
+                    setTimeout(() => {
+                        navigate("/qrcodeAuth", { state: { qrScannerCode: response.data.qrcode, uemail: formValues.email } });// Replace with your target route
+                      }, 4000);
+                    
+                }else {
+                    setTimeout(() => {
+                        navigate("/login");// Replace with your target route
+                      }, 4000);
+                    navigate("/login");
                 }
 
                // setSuccessMessage(response.data.message)
