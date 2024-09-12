@@ -40,12 +40,13 @@ const UserRoleForm = ({ user }) => {
 
         // Perform API call to update roles
         try {
-
-            const response = await axios.put(`http://localhost:8080/api/v1.0/blogsite/user/${user.id}/roles`, rolesArray, {
+            const token = localStorage.getItem('accessToken');
+            console.log("Token being sent:", token);
+            const response = await axios.put(`http://localhost:8080/api/v1.0/blogsite/user/${user.id}/roles`, rolesArray,{
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+                  "Authorization": `Bearer ${token}`
+                }
+              });
 
             if (response) {
                 console.log('Roles updated successfully!');

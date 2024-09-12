@@ -25,7 +25,11 @@ const DashBoard = () => {
 
     useEffect(() => {
         // Fetch blogs data from the API
-        axios.get('http://localhost:8080/api/v1.0/blogsite/blogs/getall')
+        axios.get('http://localhost:8080/api/v1.0/blogsite/blogs/getall', {headers: {
+            Authorization: `Bearer ${authData.accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        })
             .then(response => {
                 console.log(response.data);
                 setBlogs(response.data); // Update state with fetched data

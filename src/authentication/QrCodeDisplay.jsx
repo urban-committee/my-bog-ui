@@ -21,7 +21,7 @@ const QrCodeDisplay = () => {
                 style={{marginTop: 25, width: '200px', height: '200px'}}
             />
             <div>
-                <h6>Enter OTP</h6>
+                {/* <h6>Enter OTP</h6> */}
                 <OTPInput length={6} onChange={handleOTPChange} uemail={uemail} type={"new"}/>
             </div>
         </div>

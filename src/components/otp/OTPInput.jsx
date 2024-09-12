@@ -64,11 +64,10 @@ const OTPInput = ({length = 6, onChange, uemail,type}) => {
                 console.log(authData.accessToken)
                 const response = await axios.post('http://localhost:8080/api/v1.0/blogsite/user/2fa-enable', data1,{
                     headers: {
-                      Authorization: `Bearer ${authData.accessToken}`,
-                      'Content-Type': 'application/json'
+                      Authorization: `Bearer ${authData.accessToken}`
                     }
                   });
-                  console.log(response);
+                  console.log(data1);
                 toast.success('OTP Verified:',{
                     position: "top-right",    // Position of the toast
                     autoClose: 3000,          // Auto close after 5 seconds
@@ -106,7 +105,12 @@ const OTPInput = ({length = 6, onChange, uemail,type}) => {
     };
 
     return (
+        
         <div>
+        <div>
+            <h5>Verify Your two-factor authentication(2FA)</h5>
+            <h6>Enter authentication code.</h6>
+        </div>
             <div style={{display: 'flex', justifyContent: 'center', gap: '10px'}}>
                 {otp.map((digit, index) => (
                     <input

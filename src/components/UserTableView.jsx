@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState,useContext, Fragment, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -22,7 +22,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios';
-import CheckboxForm from "./CheckboxForm.jsx";
 import UserRoleForm from "./UserRoleForm.jsx";
 
 function Row({ row, onEdit,onDelete }) {
@@ -94,7 +93,14 @@ export default function UserTableView() {
     });
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/v1.0/blogsite/user/all')
+        // Retrieve the access token from localStorage
+        const token = localStorage.getItem('accessToken');
+        console.log("Token being sent:", token);
+        axios.get('http://localhost:8080/api/v1.0/blogsite/user/all',{
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          })
             .then(response => {
                 console.log(response.data);
                 setRows(response.data);
@@ -102,7 +108,7 @@ export default function UserTableView() {
             .catch(error => {
                 console.error('There was an error fetching the data!', error);
             });
-    }, []);
+    },  []);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -155,7 +161,13 @@ export default function UserTableView() {
     };
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:8080/api/v1.0/blogsite/blogs/delete/${id}`)
+        const token = localStorage.getItem('accessToken');
+        console.log("Token being sent:", token);
+        axios.delete(`http://localhost:8080/api/v1.0/blogsite/user/delete/${id}`,{
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          })
             .then(() => {
                 setRows(prevRows => prevRows.filter(row => row.id !== id));
             })
